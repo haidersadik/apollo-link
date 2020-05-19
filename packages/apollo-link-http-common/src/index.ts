@@ -1,6 +1,7 @@
 import { Operation } from 'apollo-link';
 import { print } from 'graphql/language/printer';
 import { InvariantError } from 'ts-invariant';
+var stripIgnoredCharactersUtilite = require("graphql/utilities/stripIgnoredCharacters");
 
 /*
  * Http Utilities: shared across links that make http requests
@@ -236,7 +237,9 @@ export const selectHttpOptionsAndBody = (
   if (http.includeExtensions) (body as any).extensions = extensions;
 
   // not sending the query (i.e persisted queries)
-  if (http.includeQuery) (body as any).query = print(query);
+  if (http.includeQuery)
+    (body as any).query = print(query);
+    (body as any).query = stripIgnoredCharactersUtilite.stripIgnoredCharacters(body.query);
 
   return {
     options,
